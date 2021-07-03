@@ -1,0 +1,2 @@
+Até o momento, uma das coisas que eu aprendi de novo, foi escrever código sql em um arquivo chamado data.sql, e quando eu subo aplicação, ele executa os scripts desse arquivo.
+Também aprendi uma nova classe do spring que é o jdbcTemplate, na qual utilizamos querys puras e de forma mais produtiva.

@@ -25,21 +25,14 @@ public class Application {
 			List<Cliente> todosClientes = clientes.findAll();
 			todosClientes.forEach(System.out::println);
 			
-			System.out.println("Atualizando clientes");
-			todosClientes.forEach(c ->{
-				c.setNome(c.getNome() + " atualizado");
-				clientes.save(c);
-			});
+			System.out.println("Existe cliente com esse nmome:");
+			boolean existeCliente = clientes.existsByNome("Douglas");
+			System.out.println(existeCliente);
 			
-			System.out.println("Buscando cliente");
-			clientes.findByNomeLike("fael").forEach(System.out::println);
+			System.out.println("Busca de clientes");
+			List<Cliente> result = clientes.encontrarPornome("Rafael");
+			result.forEach(System.out::println);
 			
-			System.out.println("Deletando Clientes");
-			clientes.deleteById(1);
-			
-			System.out.println("Listagem ultima");
-			todosClientes = clientes.findAll();
-			todosClientes.forEach(System.out::println);
 		};
 	}
 	

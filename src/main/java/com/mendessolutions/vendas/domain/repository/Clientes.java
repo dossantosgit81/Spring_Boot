@@ -2,58 +2,22 @@ package com.mendessolutions.vendas.domain.repository;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.mendessolutions.vendas.domain.entity.Cliente;
 
-@Repository
-public class Clientes {
-	
-	@Autowired
-	private EntityManager entityManager;
+public interface Clientes extends JpaRepository<Cliente, Integer> {
 
-	@Transactional
-	public Cliente salvar (Cliente cliente) {
-		entityManager.persist(cliente);
-		return cliente;
-	}
+	//*Query methods*
 	
-	@Transactional
-	public Cliente atualizar(Cliente cliente) {
-		entityManager.merge(cliente);
-		return cliente;
-	}
+	List<Cliente> findByNomeLike(String nome);
 	
-	@Transactional
-	public void deletar(Cliente cliente) {
-		entityManager.remove(cliente);
-	}
+	List<Cliente> findByNomeOrIdOrderById(String nome, Integer id);
 	
-	@Transactional
-	public void deletar(Integer id) {
-		Cliente cliente = entityManager.find(Cliente.class, id);
-		deletar(cliente);
-	}
+	Cliente findOneByNome(String nome);
 	
-	@Transactional(readOnly = true)
-	public List<Cliente> buscarClientePorNome(String nome) {	
-		String jpql = " select c from Cliente c where c.nome = :nome ";
-		TypedQuery<Cliente> query = entityManager.createQuery(jpql, Cliente.class);
-		query.setParameter("nome", "%" +nome+ "%");
-		return query.getResultList();
-	}
+	boolean existsByNome(String nome);
 	
-	@Transactional (readOnly = true)
-	public List<Cliente> obterTodos(){
-		return entityManager
-				.createQuery("from Cliente", Cliente.class)
-				.getResultList();
-	}
-
+	
 	
 }

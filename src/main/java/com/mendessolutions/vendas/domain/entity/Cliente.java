@@ -1,6 +1,5 @@
 package com.mendessolutions.vendas.domain.entity;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -10,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "cliente")
@@ -23,9 +24,9 @@ public class Cliente {
 	@Column(name = "nome", length = 100)
 	private String nome;
 	
-	
+	@JsonIgnore
 	@OneToMany(mappedBy="cliente")
-	private Set<Pedido> pedidos = new HashSet<Pedido>() ;
+	private Set<Pedido> pedidos;
 	
 	public Set<Pedido> getPedidos() {
 		return pedidos;

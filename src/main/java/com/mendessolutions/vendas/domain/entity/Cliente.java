@@ -1,5 +1,6 @@
 package com.mendessolutions.vendas.domain.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -22,17 +23,15 @@ public class Cliente {
 	@Column(name = "nome", length = 100)
 	private String nome;
 	
+	
 	@OneToMany(mappedBy="cliente")
-	private Set<Pedido> pedidos ;
+	private Set<Pedido> pedidos = new HashSet<Pedido>() ;
 	
 	public Set<Pedido> getPedidos() {
 		return pedidos;
 	}
 
-	public void setPedidos(Set<Pedido> pedidos) {
-		this.pedidos = pedidos;
-	}
-
+	
 	public Cliente() {
 		
 	}
@@ -58,7 +57,7 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente [id=" + id + ", nome=" + nome +"]";
+		return "Cliente [id=" + id + ", nome=" + nome + "]";
 	}
 
 	

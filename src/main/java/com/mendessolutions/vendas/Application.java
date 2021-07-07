@@ -21,33 +21,24 @@ public class Application {
 	@Bean
 	public CommandLineRunner init (@Autowired Clientes clientes, @Autowired Pedidos pedidos) {
 		return args -> {
-			System.out.println("Salvando clientes");
-			clientes.save(new Cliente("Rafael", null));
-			Cliente douglas = clientes.save(new Cliente("Douglas", null));
-			System.out.println(douglas);
+            System.out.println("Salvando clientes");
+            Cliente fulano = new Cliente("Fulano", null);
+            clientes.save(fulano);
+
+            Pedido p = new Pedido();
+            p.setCliente(fulano);
+            p.setDataPedido(LocalDate.now());
+            p.setTotal(BigDecimal.valueOf(100));
+
+            pedidos.save(p);
+//
+//            Cliente cliente = clientes.findClienteFetchPedidos(fulano.getId());
+//            System.out.println(cliente);
+//            System.out.println(cliente.getPedidos());
+            
+            List<Pedido> listaPedidos = pedidos.findByCliente(fulano);
+            listaPedidos.forEach(System.out::println);
 			
-			Pedido p = new Pedido();
-			p.setCliente(douglas);
-			p.setDataPedido( LocalDate.now() );
-			p.setTotal(BigDecimal.valueOf(100.00));
-			pedidos.save(p);
-			
-			Cliente clienteProcurado = clientes.findClienteFetchPedidos(douglas.getId());
-			
-			System.out.println("Aqui o cliente procurado"+ clienteProcurado);
-			System.out.println(clienteProcurado.getPedidos());
-			
-			System.out.println("Listagem clientes");
-			List<Cliente> todosClientes = clientes.findAll();
-			todosClientes.forEach(System.out::println);
-			
-			System.out.println("Existe cliente com esse nmome:");
-			boolean existeCliente = clientes.existsByNome("Douglas");
-			System.out.println(existeCliente);
-			
-			System.out.println("Busca de clientes");
-			List<Cliente> result = clientes.encontrarPornome("Rafael");
-			result.forEach(System.out::println);
 			
 		};
 	}

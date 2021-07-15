@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.mendessolutions.vendas.domain.entity.enums.StatusPedido;
 
 @Entity
 public class Pedido {
@@ -32,6 +36,10 @@ public class Pedido {
 	
 	@Column(name="total", scale=2, precision=20)
 	private BigDecimal total;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name="status")
+	private StatusPedido status;
 	
 	@OneToMany(mappedBy="pedido"  ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ItemPedido> itens;
@@ -62,13 +70,23 @@ public class Pedido {
 	public void setDataPedido(LocalDate dataPedido) {
 		this.dataPedido = dataPedido;
 	}
+	
+	public StatusPedido getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusPedido status) {
+		this.status = status;
+	}
+
 	public BigDecimal getTotal() {
 		return total;
 	}
 	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
-
+	
+	
 	@Override
 	public String toString() {
 		return "Pedido [id=" + id + ", cliente=" + cliente + ", dataPedido=" + dataPedido + ", total=" + total

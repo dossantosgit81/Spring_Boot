@@ -12,10 +12,12 @@ import com.mendessolutions.vendas.domain.entity.Cliente;
 import com.mendessolutions.vendas.domain.entity.ItemPedido;
 import com.mendessolutions.vendas.domain.entity.Pedido;
 import com.mendessolutions.vendas.domain.entity.Produto;
+import com.mendessolutions.vendas.domain.entity.enums.StatusPedido;
 import com.mendessolutions.vendas.domain.repository.Clientes;
 import com.mendessolutions.vendas.domain.repository.ItemsPedidos;
 import com.mendessolutions.vendas.domain.repository.Pedidos;
 import com.mendessolutions.vendas.domain.repository.Produtos;
+import com.mendessolutions.vendas.exception.PedidoNaoEncontradoException;
 import com.mendessolutions.vendas.exception.RegraNegocioException;
 import com.mendessolutions.vendas.rest.dto.ItensPedidoDTO;
 import com.mendessolutions.vendas.rest.dto.PedidoDTO;
@@ -46,6 +48,7 @@ public class PedidoServiceImpl implements PedidoService{
 		pedido.setTotal(dto.getTotal());
 		pedido.setDataPedido(LocalDate.now());
 		pedido.setCliente(cliente);
+		pedido.setStatus(StatusPedido.REALIZADO);
 		
 		List<ItemPedido> itemsPedido = converterItens(pedido, dto.getItens());
 		
@@ -82,6 +85,17 @@ public class PedidoServiceImpl implements PedidoService{
 	    public Optional<Pedido> obterPedidoCompleto(Integer id) {
 	        return repository.findByIdFetchItens(id);
 	    }
+
+		@Override
+		@Transactional
+		public void atualizaStatus(Integer id, StatusPedido statusPedido) {
+			repository
+				.findById(id)
+				.map(pedido -> {
+					pedido.setStatus(statusPedido);
+					return repository.save(pedido);
+				}).orElseThrow(()->new PedidoNaoEncontradoException());
+		}
 
 }
 	

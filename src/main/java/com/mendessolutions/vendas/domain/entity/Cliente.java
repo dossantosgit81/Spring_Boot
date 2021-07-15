@@ -9,11 +9,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "cliente")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cliente {
 
 	@Id
@@ -22,18 +32,13 @@ public class Cliente {
 	private Integer id;
 	
 	@Column(name = "nome", length = 100)
+	@NotEmpty(message="Campo nome é obrigatório.")
 	private String nome;
 	
-	@Column(length=11)
+	@Column(name = "cpf", length=11)
+	@NotEmpty(message = "Campo cpf é obrigatorio.")
+	@CPF(message = "Informe um cpf valido.")
 	private String cpf;
-		
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
 
 	@JsonIgnore
 	@OneToMany(mappedBy="cliente")
@@ -43,34 +48,13 @@ public class Cliente {
 		return pedidos;
 	}
 
-	
-	public Cliente() {
-		
-	}
-	
-	public Cliente(String nome, Integer id) {
-		super();
-		this.id = id;
-		this.nome = nome;
-	}
 
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+	
 
-	@Override
-	public String toString() {
-		return "Cliente [id=" + id + ", nome=" + nome + "]";
-	}
+
+
+	
+
 
 	
 	

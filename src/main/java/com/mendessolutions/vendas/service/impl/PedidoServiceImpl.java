@@ -2,6 +2,7 @@ package com.mendessolutions.vendas.service.impl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -34,12 +35,6 @@ public class PedidoServiceImpl implements PedidoService{
 	
 	private final ItemsPedidos itemsPedidosRepository;
 
-//	public PedidoServiceImpl(Pedidos repository, Clientes clientesRepository, Produtos produtosRepository) {
-//		this.repository = repository;
-//		this.clientesRepository = clientesRepository;
-//		this.produtosRepository  = produtosRepository;
-//	}
-
 	@Override
 	@Transactional
 	public Pedido salvar(PedidoDTO dto) {
@@ -54,9 +49,9 @@ public class PedidoServiceImpl implements PedidoService{
 		
 		List<ItemPedido> itemsPedido = converterItens(pedido, dto.getItens());
 		
+		pedido.setItens(itemsPedido);
 		repository.save(pedido);
 		itemsPedidosRepository.saveAll(itemsPedido);
-		pedido.setItens(itemsPedido);
 		return pedido;
 	}
 	
@@ -71,7 +66,7 @@ public class PedidoServiceImpl implements PedidoService{
 					Integer idProduto = dto.getProduto();
 					Produto produto = produtosRepository
 						.findById(idProduto)
-						.orElseThrow(()-> new RegraNegocioException("Código de produto inválido " + idProduto));
+						.orElseThrow(()-> new RegraNegocioException("Código "+idProduto+" de produto inválido "));
 					
 					ItemPedido itemPedido = new ItemPedido();
 					itemPedido.setQuantidade(dto.getQuantidade());
@@ -82,7 +77,14 @@ public class PedidoServiceImpl implements PedidoService{
 		
 		
 	}
+
+		@Override
+	    public Optional<Pedido> obterPedidoCompleto(Integer id) {
+	        return repository.findByIdFetchItens(id);
+	    }
+
+}
 	
 	
 
-}
+

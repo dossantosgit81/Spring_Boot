@@ -8,37 +8,29 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="produto")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Produto {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="id")
 	private Integer id;
+	
+	@NotEmpty(message="Campo descrição é obrigatório.")
 	private String descricao;
+	
+	@NotNull(message="Campo preço é obrigatório.")
 	private BigDecimal preco;
-	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public String getDescricao() {
-		return descricao;
-	}
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-	public BigDecimal getPreco() {
-		return preco;
-	}
-	public void setPreco(BigDecimal preco) {
-		this.preco = preco;
-	}
-	
-	
 	
 }
